@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- three ranked rows -->
+    <rect x="4" y="7"  width="30" height="9" rx="4.5" fill="#4caf50"/>
+    <rect x="4" y="19" width="30" height="9" rx="4.5" fill="#ffc107"/>
+    <rect x="4" y="31" width="30" height="9" rx="4.5" fill="#e53935"/>
+    <g fill="#fff" font-family="sans-serif" font-weight="bold" font-size="8" text-anchor="middle">
+      <text x="11" y="14">1</text>
+      <text x="11" y="26">2</text>
+      <text x="11" y="38">3</text>
+    </g>
+    <g stroke="#fff" stroke-width="2" opacity=".9">
+      <path d="M18 11.5h11M18 23.5h11M18 35.5h11"/>
+    </g>
+    <!-- up / down -->
+    <g fill="none" stroke="#3daee9" stroke-width="3">
+      <path d="M41 19v-11M37 12l4-4 4 4"/>
+      <path d="M41 29v11M37 36l4 4 4-4"/>
+    </g>
+  </g>
+</svg>

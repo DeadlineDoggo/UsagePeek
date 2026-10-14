@@ -1,0 +1,16 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Name": "Usage Peek",
+        "Id": "org.kde.usagepeek",
+        "Description": "CPU, memory and disk usage with circle, bar, line and icon displays",
+        "Category": "System Information",
+        "Icon": "org.kde.usagepeek",
+        "Authors": [{ "Name": "mr__kuko" }],
+        "Version": "0.1.0",
+        "License": "MIT"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-API": "declarativeappletscript",
+    "X-Plasma-MainScript": "ui/main.qml"
+}
