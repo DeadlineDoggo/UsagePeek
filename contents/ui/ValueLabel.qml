@@ -11,5 +11,5 @@ PlasmaComponents.Label {
     color: host.fg
     font.pixelSize: host.cfg.fontSize > 0 ? host.cfg.fontSize : Kirigami.Theme.defaultFont.pixelSize
     font.bold: true
-    Layout.alignment: Qt.AlignHCenter
+    Layout.alignment: Qt.AlignCenter
 }

@@ -15,6 +15,7 @@ KCM.SimpleKCM {
     property string cfg_fillDirection
     property string cfg_tagPosition
     property bool   cfg_showValue
+    property string cfg_valuePosition
     property int    cfg_itemSpacing
     property int    cfg_tagSpacing
     property bool   cfg_showName
@@ -88,6 +89,14 @@ KCM.SimpleKCM {
                        enabled: page.cfg_showTag; onValueModified: page.cfg_tagSpacing = value }
         QQC2.CheckBox { text: i18n("Show value (ignored in text-only mode)"); checked: page.cfg_showValue
                         onToggled: page.cfg_showValue = checked }
+        QQC2.ComboBox {
+            Kirigami.FormData.label: i18n("Value position:")
+            enabled: page.cfg_showValue
+            textRole: "text"; valueRole: "value"
+            model: [ { text: i18n("Below (icon / bar modes)"), value: "below" }, { text: i18n("Beside (icon / bar modes)"), value: "side" } ]
+            Component.onCompleted: currentIndex = Math.max(0, indexOfValue(page.cfg_valuePosition))
+            onActivated: page.cfg_valuePosition = currentValue
+        }
         QQC2.CheckBox { text: i18n("Show full sensor name (desktop only)"); checked: page.cfg_showName; onToggled: page.cfg_showName = checked }
         QQC2.SpinBox { Kirigami.FormData.label: i18n("Update every (s):"); from: 1; to: 60; value: page.cfg_updateRate
                        onValueModified: page.cfg_updateRate = value }

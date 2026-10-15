@@ -45,21 +45,23 @@ GridLayout {
     readonly property bool tagShown: cfg.showTag && effectiveTag.length > 0
     // In a panel, leave room for the tag label above the gauge
     readonly property real labelH: (cfg.fontSize > 0 ? cfg.fontSize : Kirigami.Theme.defaultFont.pixelSize) * 1.3
+    // Value text beside the icon / bar instead of below it
+    readonly property bool valueSide: cfg.valuePosition === "side"
     readonly property int px: {
         if (!(inPanel && panelThickness > 0)) return Math.round(cfg.gaugeSize);
         if (cfg.displayMode === "icon") {
             // use all the room the panel leaves after the value text and a stacked tag
-            const used = (cfg.showValue ? labelH + cfg.tagSpacing : 0) + (tagShown && vertTag ? labelH * 0.7 + cfg.tagSpacing : 0);
+            const used = (cfg.showValue && !valueSide ? labelH + cfg.tagSpacing : 0) + (tagShown && vertTag ? labelH * 0.7 + cfg.tagSpacing : 0);
             // the panel sets the maximum; "Gauge size" can only shrink the icon below that
             return Math.max(14, Math.min(Math.round(cfg.gaugeSize), Math.round(panelThickness - used - 6)));
         }
         return Math.max(14, Math.round(panelThickness * (cfg.displayMode === "circle" ? 0.9 : 0.55) * (tagShown && vertTag ? 0.75 : 1)));
     }
     readonly property string glyph: sensorIcon === "auto" || sensorIcon.length === 0 ? Tags.autoIcon(sensorId, sensorName) : sensorIcon
-    // Glyph box: every glyph gets the same height so the row looks even; only very wide ones (NVMe) are capped
+    // Glyph box: every glyph gets the same height so the row looks even; the width follows the glyph's aspect ratio
     readonly property real glyphAspect: Tags.glyphAspect[glyph] ?? 1
-    readonly property real glyphW: px * Math.min(glyphAspect, 1.5)
-    readonly property real glyphH: glyphW / glyphAspect
+    readonly property real glyphH: px
+    readonly property real glyphW: px * glyphAspect
     readonly property color fillColor: cfg.fillColorMode === "custom" ? cfg.fillColor : levelColor
 
     readonly property string valueText: {
@@ -118,28 +120,34 @@ GridLayout {
         }
     }
     Component { id: topbarC
-        ColumnLayout {
-            spacing: Kirigami.Units.smallSpacing
-            BarGauge { Layout.preferredWidth: si.px * 1.6; thickness: Math.max(6, si.px * 0.18)
-                       fraction: si.fraction; color: si.levelColor }
-            ValueLabel { host: si;}
+        GridLayout {
+            columns: si.valueSide ? 2 : 1
+            columnSpacing: Kirigami.Units.smallSpacing
+            rowSpacing: Kirigami.Units.smallSpacing
+            BarGauge { Layout.preferredWidth: si.px * 1.6; Layout.alignment: Qt.AlignVCenter
+                       thickness: Math.max(6, si.px * 0.18); fraction: si.fraction; color: si.levelColor }
+            ValueLabel { host: si }
         }
     }
     Component { id: lineC
-        ColumnLayout {
-            spacing: Kirigami.Units.smallSpacing
-            ValueLabel { host: si;}
-            BarGauge { Layout.preferredWidth: si.px * 1.6; thickness: 2
-                       fraction: si.fraction; color: si.levelColor }
+        GridLayout {
+            columns: si.valueSide ? 2 : 1
+            columnSpacing: Kirigami.Units.smallSpacing
+            rowSpacing: Kirigami.Units.smallSpacing
+            BarGauge { Layout.preferredWidth: si.px * 1.6; Layout.alignment: Qt.AlignVCenter
+                       Layout.row: si.valueSide ? 0 : 1; thickness: 2; fraction: si.fraction; color: si.levelColor }
+            ValueLabel { host: si; Layout.row: 0 }
         }
     }
     // Hardware glyph tinted with the base colour, filled up (or sideways) with the fill colour
     Component { id: iconC
-        ColumnLayout {
-            spacing: Kirigami.Units.smallSpacing
+        GridLayout {
+            columns: si.valueSide ? 2 : 1
+            columnSpacing: Kirigami.Units.smallSpacing
+            rowSpacing: Kirigami.Units.smallSpacing
             Item {
                 id: gl
-                Layout.alignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignCenter
                 implicitWidth: si.glyphW; implicitHeight: si.glyphH
                 readonly property bool up: si.cfg.fillDirection !== "side"
                 readonly property url src: Qt.resolvedUrl("../icons/glyphs/" + si.glyph + ".svg")
