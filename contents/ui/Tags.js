@@ -5,6 +5,8 @@ function autoTag(id, name) {
     let m;
     if (id.startsWith("cpu/all")) return "CPU";
     if ((m = id.match(/^cpu\/cpu(\d+)\//))) return "C" + (Number(m[1]) + 1);
+    if ((m = id.match(/^gpu\/gpu(\d+)\/(usage|usedVram)$/))) return (m[2] === "usedVram" ? "VRAM" : "GPU") + m[1];
+    if (id.startsWith("gpu/all")) return id.endsWith("usedVram") ? "VRAM" : "GPU";
     if (id.startsWith("memory/physical")) return "RAM";
     if (id.startsWith("memory/swap")) return "SWAP";
     if (id.startsWith("disk/all")) return "DISKS";
@@ -19,11 +21,12 @@ function diskName(name) {
 }
 
 // Glyph names (contents/icons/glyphs/glyph-<name>.svg), in the order shown in the pickers
-var glyphs = ["cpu", "ram", "swap", "hdd", "ssd", "nvme", "disk", "bolt", "unknown", "point"];
+var glyphs = ["cpu", "gpu", "ram", "swap", "hdd", "ssd", "nvme", "disk", "bolt", "unknown", "point"];
 
 // Guess the glyph for a sensor
 function autoIcon(id, name) {
     if (id.startsWith("cpu/")) return "cpu";
+    if (id.startsWith("gpu/")) return id.endsWith("usedVram") ? "ram" : "gpu";
     if (id.startsWith("memory/swap")) return "swap";
     if (id.startsWith("memory/")) return "ram";
     if (id.startsWith("disk/")) {
@@ -36,11 +39,12 @@ function autoIcon(id, name) {
 
 // Sensors reporting a byte amount (everything else under memory/ and disk/ is a percentage)
 function isBytes(id) {
-    return /^(memory\/(physical|swap)|disk\/[^\/]+)\/(used|free|application|buffer|cache|total)$/.test(id);
+    return /^(memory\/(physical|swap)|disk\/[^\/]+)\/(used|free|application|buffer|cache|total)$|^gpu\/(all|gpu\d+)\/usedVram$/.test(id);
 }
 
 // For a byte sensor, the sensor holding the total (to draw the fill level)
 function totalId(id) {
+    if (/^gpu\//.test(id)) return id.replace(/usedVram$/, "totalVram");
     return id.replace(/\/[^\/]+$/, "/total");
 }
 
@@ -53,6 +57,6 @@ function formatBytes(b) {
 
 // width / height of each glyph
 var glyphAspect = {
-    "cpu": 1, "ram": 2, "swap": 1, "hdd": 0.923, "ssd": 0.815, "nvme": 2.071, "disk": 1.556,
+    "cpu": 1, "gpu": 1.525, "ram": 2, "swap": 1, "hdd": 0.923, "ssd": 0.815, "nvme": 2.071, "disk": 1.556,
     "bolt": 0.759, "unknown": 1, "point": 1
 };

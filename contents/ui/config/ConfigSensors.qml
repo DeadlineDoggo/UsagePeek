@@ -41,11 +41,12 @@ KCM.ScrollViewKCM {
             const idx = sourceModel.index(row, 0);
             const id = sourceModel.data(idx, Sensors.SensorTreeModel.SensorId);
             const disp = sourceModel.data(idx, Qt.DisplayRole);
-            // CPU total/per-core usage, memory and swap, disk usage (percent and amount)
+            // CPU total/per-core usage, GPU usage and video memory, memory and swap, disk usage (percent and amount)
             return /^cpu\/(all|cpu\d+)\/usage$/.test(id)
                 || /^memory\/(physical|swap)\/(used|usedPercent|free|freePercent)$/.test(id)
                 || /^memory\/physical\/(application|applicationPercent|cache|cachePercent)$/.test(id)
-                || /^disk\/[^\/]+\/(used|usedPercent|free|freePercent)$/.test(id);
+                || /^disk\/[^\/]+\/(used|usedPercent|free|freePercent)$/.test(id)
+                || /^gpu\/(all|gpu\d+)\/(usage|usedVram)$/.test(id);
         }
     }
 
@@ -57,14 +58,14 @@ KCM.ScrollViewKCM {
         let sub = null;
         while (c.parent.valid) { sub = c; c = c.parent; }
         const section = treeModel.data(c, Qt.DisplayRole);
-        if (sub && /^(lmsensors|disk)\//.test(sensorModel.data(pidx, Sensors.SensorTreeModel.SensorId)))
+        if (sub && /^(lmsensors|disk|gpu)\//.test(sensorModel.data(pidx, Sensors.SensorTreeModel.SensorId)))
             name = treeModel.data(sub, Qt.DisplayRole) + ": " + name;
         return { name: name, section: section };
     }
 
     header: Kirigami.InlineMessage {
         visible: true
-        text: i18n("Tick the usage sensors to show (CPU, memory, swap, disks). Sensors come from KSysGuard. Change their order on the Order page.")
+        text: i18n("Tick the usage sensors to show (CPU, GPU, memory, swap, disks). Sensors come from KSysGuard. Change their order on the Order page.")
     }
 
     // Sensors saved in the config that are not in the live list (e.g. dGPU switched off via envycontrol / MUX).
