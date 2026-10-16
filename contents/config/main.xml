@@ -16,6 +16,7 @@
     <entry name="showValue" type="Bool"><default>true</default></entry>
     <entry name="valuePosition" type="String"><default>below</default></entry>
     <entry name="valueSpacing" type="Int"><default>4</default></entry>
+    <entry name="valueFontSize" type="Int"><default>0</default></entry>
     <entry name="valueCorner" type="String"><default>br</default></entry>
     <entry name="showName" type="Bool"><default>true</default></entry>
     <entry name="updateRate" type="Int"><default>2</default></entry>

@@ -20,6 +20,7 @@ KCM.SimpleKCM {
     property int    cfg_tagSpacing
     property int    cfg_valueSpacing
     property string cfg_valueCorner
+    property int    cfg_valueFontSize
     property bool   cfg_showName
     property int    cfg_updateRate
     property string cfg_thresholds
@@ -110,6 +111,9 @@ KCM.SimpleKCM {
             Component.onCompleted: currentIndex = Math.max(0, indexOfValue(page.cfg_valueCorner))
             onActivated: page.cfg_valueCorner = currentValue
         }
+        QQC2.SpinBox { Kirigami.FormData.label: i18n("Corner value font size (0 = auto):"); from: 0; to: 96; value: page.cfg_valueFontSize
+                       visible: page.cfg_displayMode === "icon"; enabled: page.cfg_showValue
+                       onValueModified: page.cfg_valueFontSize = value }
         QQC2.SpinBox { Kirigami.FormData.label: i18n("Space between icon and value (px):"); from: 0; to: 64; value: page.cfg_valueSpacing
                        enabled: page.cfg_showValue; onValueModified: page.cfg_valueSpacing = value }
         QQC2.CheckBox { text: i18n("Show full sensor name (desktop only)"); checked: page.cfg_showName; onToggled: page.cfg_showName = checked }

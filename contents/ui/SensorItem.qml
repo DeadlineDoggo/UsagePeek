@@ -151,7 +151,7 @@ GridLayout {
             implicitWidth: si.glyphW; implicitHeight: si.glyphH
             readonly property bool up: si.cfg.fillDirection !== "side"
             readonly property url src: Qt.resolvedUrl("../icons/glyphs/glyph-" + si.glyph + ".svg")
-            Kirigami.Icon { anchors.fill: parent; source: gl.src; isMask: true; color: si.cfg.iconColor }
+            Kirigami.Icon { anchors.fill: parent; source: gl.src; isMask: true; roundToIconSize: false; color: si.cfg.iconColor }
             Item {
                 clip: true
                 anchors.left: parent.left
@@ -161,7 +161,7 @@ GridLayout {
                 Kirigami.Icon {
                     width: gl.width; height: gl.height
                     x: 0; y: parent.height - gl.height
-                    source: gl.src; isMask: true; color: si.fillColor
+                    source: gl.src; isMask: true; roundToIconSize: false; color: si.fillColor
                 }
             }
             // Value in a small pill hugging one corner of the icon; the glyph stays intact
@@ -185,7 +185,7 @@ GridLayout {
                 text: si.valueText
                 color: si.fg
                 font.bold: true
-                font.pixelSize: Math.round(Math.max(7, si.px * 0.24))
+                font.pixelSize: si.cfg.valueFontSize > 0 ? si.cfg.valueFontSize : Math.round(Math.max(7, si.px * 0.24))
                 anchors.centerIn: badge
             }
         }
