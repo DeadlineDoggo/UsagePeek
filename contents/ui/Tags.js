@@ -18,7 +18,7 @@ function diskName(name) {
     return (i > 0 ? name.slice(0, i) : name).trim();
 }
 
-// Glyph names (contents/icons/glyphs/<name>.svg), in the order shown in the pickers
+// Glyph names (contents/icons/glyphs/glyph-<name>.svg), in the order shown in the pickers
 var glyphs = ["cpu", "ram", "swap", "hdd", "ssd", "nvme", "disk", "bolt", "unknown", "point"];
 
 // Guess the glyph for a sensor

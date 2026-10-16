@@ -137,7 +137,7 @@ KCM.ScrollViewKCM {
                             contentItem: RowLayout {
                                 Kirigami.Icon {
                                     visible: modelData.value !== "auto"
-                                    source: Qt.resolvedUrl("../../icons/glyphs/" + modelData.value + ".svg")
+                                    source: Qt.resolvedUrl("../../icons/glyphs/glyph-" + modelData.value + ".svg")
                                     isMask: true; color: Kirigami.Theme.textColor
                                     implicitWidth: Kirigami.Units.iconSizes.smallMedium
                                     implicitHeight: Kirigami.Units.iconSizes.smallMedium

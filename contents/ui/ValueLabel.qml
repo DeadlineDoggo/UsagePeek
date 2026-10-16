@@ -12,4 +12,8 @@ PlasmaComponents.Label {
     font.pixelSize: host.cfg.fontSize > 0 ? host.cfg.fontSize : Kirigami.Theme.defaultFont.pixelSize
     font.bold: true
     Layout.alignment: Qt.AlignCenter
+    // Reserve the width of three digits so the layout doesn't jump between 5%, 42% and 100%
+    horizontalAlignment: Text.AlignHCenter
+    Layout.preferredWidth: Math.max(implicitWidth, host.isBytes ? 0 : widest.advanceWidth)
+    TextMetrics { id: widest; font: parent.font; text: "100%" }
 }

@@ -44,16 +44,21 @@ GridLayout {
     readonly property bool vertTag: tagPos === "top" || tagPos === "bottom"
     readonly property bool tagShown: cfg.showTag && effectiveTag.length > 0
     // In a panel, leave room for the tag label above the gauge
-    readonly property real labelH: (cfg.fontSize > 0 ? cfg.fontSize : Kirigami.Theme.defaultFont.pixelSize) * 1.3
+    readonly property real labelH: valueMetrics.height
     // Value text beside the icon / bar instead of below it
+    readonly property string cornerPos: cfg.valueCorner || "br"
     readonly property bool valueSide: cfg.valuePosition === "side"
+    FontMetrics {
+        id: valueMetrics
+        font.pixelSize: si.cfg.fontSize > 0 ? si.cfg.fontSize : Kirigami.Theme.defaultFont.pixelSize
+        font.bold: true
+    }
     readonly property int px: {
         if (!(inPanel && panelThickness > 0)) return Math.round(cfg.gaugeSize);
         if (cfg.displayMode === "icon") {
-            // use all the room the panel leaves after the value text and a stacked tag
-            const used = (cfg.showValue && !valueSide ? labelH + cfg.tagSpacing : 0) + (tagShown && vertTag ? labelH * 0.7 + cfg.tagSpacing : 0);
-            // the panel sets the maximum; "Gauge size" can only shrink the icon below that
-            return Math.max(14, Math.min(Math.round(cfg.gaugeSize), Math.round(panelThickness - used - 6)));
+            // the value is drawn over a corner of the icon, so only a stacked tag takes room
+            const used = tagShown && vertTag ? labelH * 0.7 + cfg.tagSpacing : 0;
+            return Math.max(8, Math.min(Math.round(cfg.gaugeSize), Math.round(panelThickness - used - 6)));
         }
         return Math.max(14, Math.round(panelThickness * (cfg.displayMode === "circle" ? 0.9 : 0.55) * (tagShown && vertTag ? 0.75 : 1)));
     }
@@ -122,8 +127,8 @@ GridLayout {
     Component { id: topbarC
         GridLayout {
             columns: si.valueSide ? 2 : 1
-            columnSpacing: Kirigami.Units.smallSpacing
-            rowSpacing: Kirigami.Units.smallSpacing
+            columnSpacing: si.cfg.valueSpacing
+            rowSpacing: si.cfg.valueSpacing
             BarGauge { Layout.preferredWidth: si.px * 1.6; Layout.alignment: Qt.AlignVCenter
                        thickness: Math.max(6, si.px * 0.18); fraction: si.fraction; color: si.levelColor }
             ValueLabel { host: si }
@@ -132,8 +137,8 @@ GridLayout {
     Component { id: lineC
         GridLayout {
             columns: si.valueSide ? 2 : 1
-            columnSpacing: Kirigami.Units.smallSpacing
-            rowSpacing: Kirigami.Units.smallSpacing
+            columnSpacing: si.cfg.valueSpacing
+            rowSpacing: si.cfg.valueSpacing
             BarGauge { Layout.preferredWidth: si.px * 1.6; Layout.alignment: Qt.AlignVCenter
                        Layout.row: si.valueSide ? 0 : 1; thickness: 2; fraction: si.fraction; color: si.levelColor }
             ValueLabel { host: si; Layout.row: 0 }
@@ -141,31 +146,48 @@ GridLayout {
     }
     // Hardware glyph tinted with the base colour, filled up (or sideways) with the fill colour
     Component { id: iconC
-        GridLayout {
-            columns: si.valueSide ? 2 : 1
-            columnSpacing: Kirigami.Units.smallSpacing
-            rowSpacing: Kirigami.Units.smallSpacing
+        Item {
+            id: gl
+            implicitWidth: si.glyphW; implicitHeight: si.glyphH
+            readonly property bool up: si.cfg.fillDirection !== "side"
+            readonly property url src: Qt.resolvedUrl("../icons/glyphs/glyph-" + si.glyph + ".svg")
+            Kirigami.Icon { anchors.fill: parent; source: gl.src; isMask: true; color: si.cfg.iconColor }
             Item {
-                id: gl
-                Layout.alignment: Qt.AlignCenter
-                implicitWidth: si.glyphW; implicitHeight: si.glyphH
-                readonly property bool up: si.cfg.fillDirection !== "side"
-                readonly property url src: Qt.resolvedUrl("../icons/glyphs/" + si.glyph + ".svg")
-                Kirigami.Icon { anchors.fill: parent; source: gl.src; isMask: true; color: si.cfg.iconColor }
-                Item {
-                    clip: true
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    width: gl.up ? gl.width : Math.round(gl.width * si.fraction)
-                    height: gl.up ? Math.round(gl.height * si.fraction) : gl.height
-                    Kirigami.Icon {
-                        width: gl.width; height: gl.height
-                        x: 0; y: parent.height - gl.height
-                        source: gl.src; isMask: true; color: si.fillColor
-                    }
+                clip: true
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+                width: gl.up ? gl.width : Math.round(gl.width * si.fraction)
+                height: gl.up ? Math.round(gl.height * si.fraction) : gl.height
+                Kirigami.Icon {
+                    width: gl.width; height: gl.height
+                    x: 0; y: parent.height - gl.height
+                    source: gl.src; isMask: true; color: si.fillColor
                 }
             }
-            ValueLabel { host: si }
+            // Value in a small pill hugging one corner of the icon; the glyph stays intact
+            Rectangle {
+                id: badge
+                readonly property bool isLeft: si.cornerPos.endsWith("l")
+                readonly property bool isTop: si.cornerPos.startsWith("t")
+                visible: si.cfg.showValue
+                width: lbl.implicitWidth + 2; height: lbl.implicitHeight
+                radius: height / 3
+                color: Kirigami.Theme.backgroundColor
+                opacity: 0.75
+                anchors.left: isLeft ? parent.left : undefined
+                anchors.right: isLeft ? undefined : parent.right
+                anchors.top: isTop ? parent.top : undefined
+                anchors.bottom: isTop ? undefined : parent.bottom
+            }
+            PlasmaComponents.Label {
+                id: lbl
+                visible: si.cfg.showValue
+                text: si.valueText
+                color: si.fg
+                font.bold: true
+                font.pixelSize: Math.round(Math.max(7, si.px * 0.24))
+                anchors.centerIn: badge
+            }
         }
     }
     Component { id: textC

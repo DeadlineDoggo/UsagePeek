@@ -18,6 +18,8 @@ KCM.SimpleKCM {
     property string cfg_valuePosition
     property int    cfg_itemSpacing
     property int    cfg_tagSpacing
+    property int    cfg_valueSpacing
+    property string cfg_valueCorner
     property bool   cfg_showName
     property int    cfg_updateRate
     property string cfg_thresholds
@@ -97,6 +99,19 @@ KCM.SimpleKCM {
             Component.onCompleted: currentIndex = Math.max(0, indexOfValue(page.cfg_valuePosition))
             onActivated: page.cfg_valuePosition = currentValue
         }
+        QQC2.ComboBox {
+            Kirigami.FormData.label: i18n("Value corner (icon mode):")
+            visible: page.cfg_displayMode === "icon"; enabled: page.cfg_showValue
+            textRole: "text"; valueRole: "value"
+            model: [
+                { text: i18n("Bottom right"), value: "br" }, { text: i18n("Bottom left"), value: "bl" },
+                { text: i18n("Top right"), value: "tr" },    { text: i18n("Top left"), value: "tl" }
+            ]
+            Component.onCompleted: currentIndex = Math.max(0, indexOfValue(page.cfg_valueCorner))
+            onActivated: page.cfg_valueCorner = currentValue
+        }
+        QQC2.SpinBox { Kirigami.FormData.label: i18n("Space between icon and value (px):"); from: 0; to: 64; value: page.cfg_valueSpacing
+                       enabled: page.cfg_showValue; onValueModified: page.cfg_valueSpacing = value }
         QQC2.CheckBox { text: i18n("Show full sensor name (desktop only)"); checked: page.cfg_showName; onToggled: page.cfg_showName = checked }
         QQC2.SpinBox { Kirigami.FormData.label: i18n("Update every (s):"); from: 1; to: 60; value: page.cfg_updateRate
                        onValueModified: page.cfg_updateRate = value }
