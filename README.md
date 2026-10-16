@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo.svg" alt="Usage Peek logo" width="160">
+  <img src="docs/banner.svg" alt="Usage Peek: live usage meters for your KDE Plasma panel">
 </p>
 
 # Usage Peek
@@ -87,9 +87,10 @@ contents/ui/SensorItem.qml     one sensor: value, level logic, tag and chosen ga
 contents/ui/ValueLabel.qml     value text
 contents/ui/Tags.js            tags, icon guessing, byte formatting
 contents/ui/gauges/            CircleGauge, BarGauge
-contents/ui/config/            Sensors, Order and Appearance pages
+contents/ui/config/            Sensors, Order, Appearance and Presets pages
 contents/icons/glyphs/         hardware glyphs for the icon mode (single-colour masks)
 docs/logo.svg                  project logo, also the widget icon
+docs/banner.svg                README banner (banner.png is generated, git-ignored)
 ```
 
 ## Roadmap
