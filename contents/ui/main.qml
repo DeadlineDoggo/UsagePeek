@@ -23,9 +23,12 @@ PlasmoidItem {
 
     fullRepresentation: Item {
         id: full
+        // Outer padding before and after the whole widget, along the panel's long axis
+        readonly property real padX: (root.inPanel && !root.horizontal) ? 0 : Plasmoid.configuration.outerPadding * 2
+        readonly property real padY: (root.inPanel && !root.horizontal) ? Plasmoid.configuration.outerPadding * 2 : 0
         // In a panel only the panel's long axis follows the content; the other axis is the panel's.
-        Layout.minimumWidth:  (root.inPanel && !root.horizontal) ? 0 : (root.sensors.length ? grid.implicitWidth : Kirigami.Units.iconSizes.medium)
-        Layout.minimumHeight: (root.inPanel && root.horizontal)  ? 0 : (root.sensors.length ? grid.implicitHeight : Kirigami.Units.iconSizes.medium)
+        Layout.minimumWidth:  (root.inPanel && !root.horizontal) ? 0 : (root.sensors.length ? grid.implicitWidth + full.padX : Kirigami.Units.iconSizes.medium)
+        Layout.minimumHeight: (root.inPanel && root.horizontal)  ? 0 : (root.sensors.length ? grid.implicitHeight + full.padY : Kirigami.Units.iconSizes.medium)
         Layout.preferredWidth:  Layout.minimumWidth
         Layout.preferredHeight: Layout.minimumHeight
 

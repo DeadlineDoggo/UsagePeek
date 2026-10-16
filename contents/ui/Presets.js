@@ -2,7 +2,7 @@
 
 // Settings a preset stores: name -> type (s = string, b = bool, i = int, c = colour)
 var keys = {
-    displayMode: "s", showTag: "b", tagPosition: "s", itemSpacing: "i", tagSpacing: "i",
+    displayMode: "s", showTag: "b", tagPosition: "s", itemSpacing: "i", outerPadding: "i", tagSpacing: "i",
     iconColor: "c", fillColorMode: "s", fillColor: "c", fillDirection: "s",
     showValue: "b", valuePosition: "s", valueSpacing: "i", valueFontSize: "i", valueCorner: "s",
     showName: "b", updateRate: "i", thresholds: "s", levelColors: "s",

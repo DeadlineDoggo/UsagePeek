@@ -17,6 +17,7 @@ KCM.SimpleKCM {
     property bool   cfg_showValue
     property string cfg_valuePosition
     property int    cfg_itemSpacing
+    property int    cfg_outerPadding
     property int    cfg_tagSpacing
     property int    cfg_valueSpacing
     property string cfg_valueCorner
@@ -86,6 +87,8 @@ KCM.SimpleKCM {
             Component.onCompleted: currentIndex = Math.max(0, indexOfValue(page.cfg_tagPosition))
             onActivated: page.cfg_tagPosition = currentValue
         }
+        QQC2.SpinBox { Kirigami.FormData.label: i18n("Outer padding (px):"); from: 0; to: 128; value: page.cfg_outerPadding
+                       onValueModified: page.cfg_outerPadding = value }
         QQC2.SpinBox { Kirigami.FormData.label: i18n("Space between sensors (px):"); from: 0; to: 64; value: page.cfg_itemSpacing
                        onValueModified: page.cfg_itemSpacing = value }
         QQC2.SpinBox { Kirigami.FormData.label: i18n("Space between tag and gauge (px):"); from: 0; to: 32; value: page.cfg_tagSpacing
