@@ -129,7 +129,7 @@ GridLayout {
             columns: si.valueSide ? 2 : 1
             columnSpacing: si.cfg.valueSpacing
             rowSpacing: si.cfg.valueSpacing
-            BarGauge { Layout.preferredWidth: si.px * 1.6; Layout.alignment: Qt.AlignVCenter
+            BarGauge { Layout.preferredWidth: si.px * 1.6; Layout.fillWidth: !si.valueSide; Layout.alignment: Qt.AlignCenter
                        thickness: Math.max(6, si.px * 0.18); fraction: si.fraction; color: si.levelColor }
             ValueLabel { host: si }
         }
@@ -139,7 +139,7 @@ GridLayout {
             columns: si.valueSide ? 2 : 1
             columnSpacing: si.cfg.valueSpacing
             rowSpacing: si.cfg.valueSpacing
-            BarGauge { Layout.preferredWidth: si.px * 1.6; Layout.alignment: Qt.AlignVCenter
+            BarGauge { Layout.preferredWidth: si.px * 1.6; Layout.fillWidth: !si.valueSide; Layout.alignment: Qt.AlignCenter
                        Layout.row: si.valueSide ? 0 : 1; thickness: 2; fraction: si.fraction; color: si.levelColor }
             ValueLabel { host: si; Layout.row: 0 }
         }
