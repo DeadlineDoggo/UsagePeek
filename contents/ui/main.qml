@@ -27,15 +27,16 @@ PlasmoidItem {
         readonly property real padX: (root.inPanel && !root.horizontal) ? 0 : Plasmoid.configuration.outerPadding * 2
         readonly property real padY: (root.inPanel && !root.horizontal) ? Plasmoid.configuration.outerPadding * 2 : 0
         // In a panel only the panel's long axis follows the content; the other axis is the panel's.
-        Layout.minimumWidth:  (root.inPanel && !root.horizontal) ? 0 : (root.sensors.length ? grid.implicitWidth + full.padX : Kirigami.Units.iconSizes.medium)
-        Layout.minimumHeight: (root.inPanel && root.horizontal)  ? 0 : (root.sensors.length ? grid.implicitHeight + full.padY : Kirigami.Units.iconSizes.medium)
-        Layout.preferredWidth:  Layout.minimumWidth
-        Layout.preferredHeight: Layout.minimumHeight
+        // On the desktop the widget is freely resizable (graph / grid fill the whole card).
+        Layout.minimumWidth:  !root.inPanel ? Kirigami.Units.gridUnit * 8 : ((root.inPanel && !root.horizontal) ? 0 : (root.sensors.length ? grid.implicitWidth + full.padX : Kirigami.Units.iconSizes.medium))
+        Layout.minimumHeight: !root.inPanel ? Kirigami.Units.gridUnit * 6 : ((root.inPanel && root.horizontal)  ? 0 : (root.sensors.length ? grid.implicitHeight + full.padY : Kirigami.Units.iconSizes.medium))
+        Layout.preferredWidth:  !root.inPanel ? Kirigami.Units.gridUnit * 18 : Layout.minimumWidth
+        Layout.preferredHeight: !root.inPanel ? Kirigami.Units.gridUnit * 14 : Layout.minimumHeight
 
         GridLayout {
             id: grid
             anchors.centerIn: parent
-            visible: root.sensors.length > 0
+            visible: root.inPanel && root.sensors.length > 0
             rows: root.horizontal ? 1 : -1
             columns: root.horizontal ? -1 : 1
             columnSpacing: Plasmoid.configuration.itemSpacing
@@ -63,13 +64,10 @@ PlasmoidItem {
             source: "utilities-system-monitor"
             width: Math.min(parent.width, parent.height); height: width
         }
-        PlasmaComponents.Label {
+        DesktopView {
             anchors.fill: parent
-            visible: root.sensors.length === 0 && !root.inPanel
-            text: i18n("No sensors. Right-click → Configure…")
-            wrapMode: Text.WordWrap
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
+            visible: !root.inPanel
+            sensors: root.sensors
         }
     }
 }

@@ -15,6 +15,8 @@ GridLayout {
     property string sensorIcon: "auto"
     property bool inPanel: false
     property real panelThickness: 0
+    property real labelMaxWidth: 0   // desktop grid: widest the name may be (the cell), 0 = derive from gauge size
+    property real sizeOverride: 0   // desktop grid: gauge size from the cell, 0 = use the configured size
 
     required property var cfg
     // Sensor missing (e.g. dGPU powered off): hide it completely; it stays saved in the config
@@ -54,6 +56,7 @@ GridLayout {
         font.bold: true
     }
     readonly property int px: {
+        if (sizeOverride > 0) return Math.round(sizeOverride);
         if (!(inPanel && panelThickness > 0)) return Math.round(cfg.gaugeSize);
         if (cfg.displayMode === "icon") {
             // the value is drawn over a corner of the icon, so only a stacked tag takes room
@@ -205,6 +208,6 @@ GridLayout {
         elide: Text.ElideRight
         font.pixelSize: Math.round(Math.max(9, (si.cfg.fontSize > 0 ? si.cfg.fontSize : Kirigami.Theme.defaultFont.pixelSize) * 0.85))
         Layout.alignment: Qt.AlignHCenter
-        Layout.maximumWidth: Math.max(si.px * 1.6, 60)
+        Layout.maximumWidth: si.labelMaxWidth > 0 ? si.labelMaxWidth : Math.max(si.px * 1.6, 60)
     }
 }

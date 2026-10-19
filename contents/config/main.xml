@@ -20,6 +20,12 @@
     <entry name="valueSpacing" type="Int"><default>4</default></entry>
     <entry name="valueFontSize" type="Int"><default>0</default></entry>
     <entry name="valueCorner" type="String"><default>br</default></entry>
+    <entry name="desktopMode" type="String"><default>graph</default></entry>
+    <entry name="showTitle" type="Bool"><default>true</default></entry>
+    <entry name="graphMinutes" type="Int"><default>5</default></entry>
+    <entry name="graphFill" type="Bool"><default>true</default></entry>
+    <entry name="gridColumns" type="Int"><default>0</default></entry>
+    <entry name="scaleGauges" type="Bool"><default>true</default></entry>
     <entry name="showName" type="Bool"><default>true</default></entry>
     <entry name="updateRate" type="Int"><default>2</default></entry>
     <entry name="thresholds" type="String"><default>50,70,85,95</default></entry>
